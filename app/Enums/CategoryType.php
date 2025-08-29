@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum DocType: string implements HasLabel
+enum CategoryType: string implements HasLabel
 {
     case INCOME = 'INCOME';
     case EXPENSE = 'EXPENSE';

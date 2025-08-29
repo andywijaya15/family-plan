@@ -41,10 +41,5 @@ class AppServiceProvider extends ServiceProvider
 
             $field->label(strtoupper($label));
         });
-        Model::saving(function ($model) {
-            $data = $model->getAttributes();
-            $data = Uppercase::execute($data);
-            $model->fill($data);
-        });
     }
 }

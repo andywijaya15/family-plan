@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Categories\Tables;
+namespace App\Filament\Resources\Transactions\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\Summarizers\Sum;
 
-class CategoriesTable
+class TransactionsTable
 {
     public static function configure(Table $table): Table
     {
@@ -34,17 +32,25 @@ class CategoriesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('createdBy.name')
-                    ->numeric()
                     ->sortable(),
                 TextColumn::make('updatedBy.name')
-                    ->numeric()
                     ->sortable(),
-                TextColumn::make('type'),
-                TextColumn::make('name')
+                TextColumn::make('category.name')
                     ->searchable(),
+                TextColumn::make('amount')
+                    ->numeric()
+                    ->sortable()
+                    ->summarize([
+                        Sum::make()->label('Total'),
+                    ]),
+                TextColumn::make('transaction_date')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('paidBy.name')
+                    ->sortable(),
             ])
             ->filters([
-                TrashedFilter::make(),
+                //
             ])
             ->recordActions([
                 EditAction::make(),
@@ -52,8 +58,6 @@ class CategoriesTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
                 ]),
             ]);
     }
