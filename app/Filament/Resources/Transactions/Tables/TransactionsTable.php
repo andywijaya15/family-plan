@@ -41,10 +41,11 @@ class TransactionsTable
                 TextColumn::make('category.name')
                     ->searchable(),
                 TextColumn::make('amount')
-                    ->numeric()
+                    ->money('IDR', decimalPlaces: 0)
                     ->sortable()
                     ->summarize([
-                        Sum::make()->label('Total'),
+                        Sum::make()->label('Total')
+                            ->money('IDR', decimalPlaces: 0),
                     ]),
                 TextColumn::make('transaction_date')
                     ->date()
@@ -76,14 +77,14 @@ class TransactionsTable
                             ->label('Tahun')
                             ->options(
                                 collect(range(now()->year - 5, now()->year + 1))
-                                    ->mapWithKeys(fn ($y) => [$y => $y])
+                                    ->mapWithKeys(fn($y) => [$y => $y])
                             )
                             ->default(now()->year),
                     ])
                     ->query(function ($query, array $data) {
                         return $query
-                            ->when($data['month'], fn ($q, $month) => $q->whereMonth('transaction_date', $month))
-                            ->when($data['year'], fn ($q, $year) => $q->whereYear('transaction_date', $year));
+                            ->when($data['month'], fn($q, $month) => $q->whereMonth('transaction_date', $month))
+                            ->when($data['year'], fn($q, $year) => $q->whereYear('transaction_date', $year));
                     }),
             ], layout: FiltersLayout::Modal)
             ->recordActions([
