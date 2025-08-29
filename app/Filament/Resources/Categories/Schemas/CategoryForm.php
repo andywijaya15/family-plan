@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\Categories\Schemas;
 
 use App\Enums\CategoryType;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
 
 class CategoryForm
 {
@@ -17,7 +17,7 @@ class CategoryForm
                     ->required(),
                 Select::make('type')
                     ->options(CategoryType::class)
-                    ->required()
+                    ->required(),
             ]);
     }
 }

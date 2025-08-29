@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use App\Traits\HasAudit;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Category extends Model
 {
-    use HasUuids, SoftDeletes, HasAudit;
+    use HasAudit, HasUuids, SoftDeletes;
 }

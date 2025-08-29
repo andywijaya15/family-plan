@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Transactions\Tables;
 
-use Filament\Tables\Table;
-use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
 
 class TransactionsTable
 {
@@ -50,8 +53,39 @@ class TransactionsTable
                     ->sortable(),
             ])
             ->filters([
-                //
-            ])
+                Filter::make('period')
+                    ->schema([
+                        Select::make('month')
+                            ->label('Bulan')
+                            ->options([
+                                1 => 'Januari',
+                                2 => 'Februari',
+                                3 => 'Maret',
+                                4 => 'April',
+                                5 => 'Mei',
+                                6 => 'Juni',
+                                7 => 'Juli',
+                                8 => 'Agustus',
+                                9 => 'September',
+                                10 => 'Oktober',
+                                11 => 'November',
+                                12 => 'Desember',
+                            ])
+                            ->default(now()->month),
+                        Select::make('year')
+                            ->label('Tahun')
+                            ->options(
+                                collect(range(now()->year - 5, now()->year + 1))
+                                    ->mapWithKeys(fn ($y) => [$y => $y])
+                            )
+                            ->default(now()->year),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['month'], fn ($q, $month) => $q->whereMonth('transaction_date', $month))
+                            ->when($data['year'], fn ($q, $year) => $q->whereYear('transaction_date', $year));
+                    }),
+            ], layout: FiltersLayout::Modal)
             ->recordActions([
                 EditAction::make(),
             ])

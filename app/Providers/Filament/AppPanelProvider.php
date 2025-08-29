@@ -25,6 +25,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->brandName('FAMILY PLAN')
             ->id('app')
             ->path('')
             ->login()

@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use App\Actions\Uppercase;
-use Filament\Tables\Columns\Column;
 use Filament\Forms\Components\Field;
+use Filament\Tables\Columns\Column;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 

@@ -2,10 +2,10 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use App\Actions\Uppercase;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 trait HasAudit
 {
@@ -25,7 +25,7 @@ trait HasAudit
         });
 
         static::deleting(function ($model) {
-            if (Auth::check() && !$model->isForceDeleting()) {
+            if (Auth::check() && ! $model->isForceDeleting()) {
                 $model->deleted_by = Auth::id();
                 $model->saveQuietly();
             }

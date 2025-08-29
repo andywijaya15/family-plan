@@ -3,15 +3,14 @@
 namespace App\Models;
 
 use App\Traits\HasAudit;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
 {
-    use HasUuids, SoftDeletes, HasAudit;
+    use HasAudit, HasUuids, SoftDeletes;
 
     public function category(): BelongsTo
     {
