@@ -46,7 +46,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function canAccessPanel(Panel $panel): bool
+    public function canAccessPanel($panel): bool
     {
         return true;
     }
