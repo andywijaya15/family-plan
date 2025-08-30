@@ -1,0 +1,41 @@
+services:
+  family_plan_server:
+    container_name: family_plan_server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ".:/app"
+    networks:
+      - family_plan_network
+  family_plan_db:
+    image: postgres:17.3-alpine
+    container_name: family_plan_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: family_plan
+      POSTGRES_PASSWORD: family_plan
+      POSTGRES_DB: family_plan
+    ports:
+      - "6000:5432"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - family_plan_network
+
+networks:
+  family_plan_network:
+    driver: bridge
+
+    # depends_on:
+    #   - mysql
+  # artisan:
+  #   volumes:
+  #     - ".:/app"
+  #   image: family_plan_server
+  #   depends_on:
+  #     - mysql
+  #     - redis
+  #   entrypoint: "frankenphp php-cli artisan"

@@ -35,11 +35,13 @@ class CategoriesTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('createdBy.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updatedBy.name')
                     ->numeric()
-                    ->sortable(),
-                TextColumn::make('type'),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                // TextColumn::make('type'),
                 TextColumn::make('name')
                     ->searchable(),
             ])
