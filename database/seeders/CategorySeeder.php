@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\CategoryType;
 use App\Models\Category;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class CategorySeeder extends Seeder
 {
@@ -21,7 +19,7 @@ class CategorySeeder extends Seeder
             'BELANJA',
             'LISTRIK',
             'PDAM',
-            'JAJAN'
+            'JAJAN',
         ];
         foreach ($categories as $category) {
             $insertCategories[] = [
@@ -30,7 +28,7 @@ class CategorySeeder extends Seeder
                 'created_by' => 1,
                 'updated_by' => 1,
                 'name' => $category,
-                'type' => CategoryType::EXPENSE
+                'type' => CategoryType::EXPENSE,
             ];
         }
         if ($insertCategories) {

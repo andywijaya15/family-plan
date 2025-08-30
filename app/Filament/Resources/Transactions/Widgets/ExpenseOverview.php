@@ -3,12 +3,9 @@
 namespace App\Filament\Resources\Transactions\Widgets;
 
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
-use App\Models\Transaction;
-use Illuminate\Support\Facades\DB;
+use Filament\Widgets\Concerns\InteractsWithPageTable;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageTable;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 
 class ExpenseOverview extends StatsOverviewWidget
 {
@@ -30,7 +27,7 @@ class ExpenseOverview extends StatsOverviewWidget
         foreach ($transactions as $tx) {
             $id = $tx->paid_by;
 
-            if (!isset($totals[$id])) {
+            if (! isset($totals[$id])) {
                 $totals[$id] = 0;
             }
 
@@ -42,8 +39,8 @@ class ExpenseOverview extends StatsOverviewWidget
         foreach ($totals as $paidById => $total) {
             $paidByName = $transactions->firstWhere('paid_by', $paidById)->paidBy->name ?? 'Unknown';
 
-            $stats[] = Stat::make("Paid by: {$paidByName}", 'Rp ' . number_format($total, 0, ',', '.'))
-                ->description('Total expense')
+            $stats[] = Stat::make("{$paidByName}", 'Rp '.number_format($total, 0, ',', '.'))
+                ->description('Total Reimbursed Bulan Ini')
                 ->color('danger');
         }
 

@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\Transactions\Pages;
 
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
-use Filament\Pages\Concerns\ExposesTableToWidgets;
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Filament\Resources\Transactions\Widgets\ExpenseOverview;
+use Filament\Actions\CreateAction;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
+use Filament\Resources\Pages\ListRecords;
 
 class ListTransactions extends ListRecords
 {
