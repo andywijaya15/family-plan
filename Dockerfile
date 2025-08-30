@@ -1,10 +1,15 @@
-FROM dunglas/frankenphp
+FROM dunglas/frankenphp:latest
 
-RUN install-php-extensions \
-    pcntl \
-    pdo_pgsql \
-    intl
+WORKDIR /app
 
-COPY . /app
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-ENTRYPOINT ["php", "artisan", "octane:frankenphp","--watch"]
+RUN install-php-extensions pcntl pdo_pgsql intl zip
+
+COPY composer.json composer.lock ./
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+COPY . .
+
+ENTRYPOINT ["php", "artisan", "octane:frankenphp", "--watch"]
