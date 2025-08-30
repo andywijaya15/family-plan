@@ -25,7 +25,6 @@ class CategorySeeder extends Seeder
         ];
         foreach ($categories as $category) {
             $insertCategories[] = [
-                'id' => Str::uuid7(),
                 'created_at' => now(),
                 'updated_at' => now(),
                 'created_by' => 1,

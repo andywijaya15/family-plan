@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Transactions;
 use App\Filament\Resources\Transactions\Pages\ListTransactions;
 use App\Filament\Resources\Transactions\Schemas\TransactionForm;
 use App\Filament\Resources\Transactions\Tables\TransactionsTable;
+use App\Filament\Resources\Transactions\Widgets\ExpenseOverview;
 use App\Models\Transaction;
 use BackedEnum;
 use Filament\Resources\Resource;

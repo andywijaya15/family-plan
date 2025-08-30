@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->timestamps();
             $table->softDeletes();
             $table->foreignIdFor(User::class, 'created_by')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
