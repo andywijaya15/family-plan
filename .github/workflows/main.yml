@@ -7,10 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
-    labels:
-      - linux
-      - arm64
+    runs-on: [self-hosted, linux, arm64]
 
     permissions:
       contents: read
