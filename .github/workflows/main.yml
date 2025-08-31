@@ -67,6 +67,6 @@ jobs:
       - name: Create multi-arch latest tag
         run: |
           docker buildx imagetools create \
-            ghcr.io/${{ github.repository_owner }}/family-plan:latest \
+            --tag ghcr.io/${{ github.repository_owner }}/family-plan:latest \
             ghcr.io/${{ github.repository_owner }}/family-plan:amd64 \
             ghcr.io/${{ github.repository_owner }}/family-plan:arm64
