@@ -30,6 +30,17 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/family-plan:arm64 .
           docker push ghcr.io/${{ github.repository_owner }}/family-plan:arm64
 
+      - name: Deploy with Docker Compose
+        run: |
+          cd /home/ndik/stacks/family-plan
+          docker compose pull
+          docker compose up -d
+
+      - name: Run Laravel migrations
+        run: |
+          cd /home/ndik/stacks/family-plan
+          docker-compose exec -T family_plan_server php artisan migrate --force
+
   build_amd64:
     name: Build AMD64 (GitHub-hosted)
     runs-on: ubuntu-latest
@@ -70,9 +81,3 @@ jobs:
             --tag ghcr.io/${{ github.repository_owner }}/family-plan:latest \
             ghcr.io/${{ github.repository_owner }}/family-plan:amd64 \
             ghcr.io/${{ github.repository_owner }}/family-plan:arm64
-
-      - name: Deploy with Docker Compose
-        run: |
-          cd /home/ndik/stacks/family-plan
-          docker compose pull
-          docker compose up -d
