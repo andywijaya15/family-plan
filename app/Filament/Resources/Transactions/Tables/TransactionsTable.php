@@ -55,6 +55,7 @@ class TransactionsTable
                     ->sortable(),
                 TextColumn::make('paidBy.name')
                     ->sortable(),
+                TextColumn::make('description')
             ])
             ->filters([
                 Filter::make('period')
