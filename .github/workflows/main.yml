@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,11 +18,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx (native docker driver)
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker
-
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
@@ -29,13 +25,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & push Docker image (ARM64 only)
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          platforms: linux/arm64
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/family-plan:latest
-            ghcr.io/${{ github.repository_owner }}/family-plan:${{ github.sha }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/family-plan:cache
+      - name: Build Docker image (ARM64 native)
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/family-plan:latest .
+
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository_owner }}/family-plan:latest
