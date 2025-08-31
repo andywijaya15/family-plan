@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Transactions\Pages;
 
 use App\Filament\Resources\Transactions\TransactionResource;
 use App\Filament\Resources\Transactions\Widgets\ExpenseOverview;
+use App\Filament\Resources\Transactions\Widgets\ExpenseOverviewByCategory;
 use Filament\Actions\CreateAction;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
@@ -18,6 +19,7 @@ class ListTransactions extends ListRecords
     {
         return [
             ExpenseOverview::class,
+            ExpenseOverviewByCategory::class
         ];
     }
 
