@@ -39,7 +39,7 @@ jobs:
       - name: Run Laravel migrations
         run: |
           cd /home/ndik/stacks/family-plan
-          docker-compose exec -T family_plan_server php artisan migrate --force
+          docker compose exec -T family_plan_server php artisan migrate --force
 
   build_amd64:
     name: Build AMD64 (GitHub-hosted)
