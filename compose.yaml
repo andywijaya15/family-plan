@@ -1,9 +1,10 @@
 services:
   family_plan_server:
     container_name: family_plan_server
-    image: ghcr.io/andywijaya15/family-plan:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
       - .env/:/app/.env
-    restart: unless-stopped
