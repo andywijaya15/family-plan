@@ -32,7 +32,5 @@ RUN php artisan filament:optimize
 
 RUN rm -rf ./git
 
-RUN php artisan octane:start --server=frankenphp
-
 # Run FrankenPHP
 CMD ["php", "artisan", "octane:frankenphp", "--host=0.0.0.0", "--port=80"]
