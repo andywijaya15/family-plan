@@ -36,25 +36,25 @@ jobs:
           platforms: linux/amd64
           tags: ghcr.io/${{ github.repository_owner }}/family-plan:latest
 
-  # deploy:
-  #   name: Deploy to Self-Hosted AMD64
-  #   runs-on: [self-hosted, linux, amd64]
-  #   needs: build
+  deploy:
+    name: Deploy to Self-Hosted AMD64
+    runs-on: [self-hosted, linux, x64, shared-vps]
+    needs: build
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Log in to GHCR
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Deploy with Docker Compose & Run Migrations
-  #       run: |
-  #         cd /home/ndik/stacks/family-plan
-  #         docker compose pull
-  #         docker compose up -d
-  #         docker compose exec -T family_plan_server php artisan migrate --force
+      - name: Deploy with Docker Compose & Run Migrations
+        run: |
+          cd /home/devteam/stacks/family-plan
+          docker compose pull
+          docker compose up -d
+          docker compose exec -T family_plan_server php artisan migrate --force
