@@ -21,6 +21,9 @@ RUN install-php-extensions \
     sodium \
     pcntl
 
+RUN curl -L https://github.com/php/frankenphp/releases/download/v1.9.1/frankenphp-linux-x86_64 -o /usr/local/bin/frankenphp \
+    && chmod +x /usr/local/bin/frankenphp
+
 WORKDIR /app
 
 COPY . ./
