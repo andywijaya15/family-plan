@@ -28,6 +28,8 @@ COPY . ./
 # Install dependencies using Composer
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan filament:optimize
+
 RUN rm -rf ./git
 
 # Run FrankenPHP
