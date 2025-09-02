@@ -1,27 +1,34 @@
-FROM php:8.4-cli
+FROM dunglas/frankenphp:latest-php8.3
+
+# Install dependencies untuk Composer dan ekstensi PHP
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    libpq-dev \
+    libexif-dev \
+    libsodium-dev
+
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN install-php-extensions \
+    pgsql \
+    pdo_pgsql \
+    gd \
+    intl \
+    zip \
+    exif \
+    sodium \
+    pcntl
 
 WORKDIR /app
 
-# Install system dependencies + PHP extensions
-RUN apt-get update && apt-get install -y \
-    libicu-dev \
-    libzip-dev \
-    unzip \
-    git \
-    libpq-dev \
-    && docker-php-ext-install intl pdo_pgsql pcntl zip
+COPY . ./
 
-# Copy composer binary
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install dependencies using Composer
+RUN composer install --no-dev --optimize-autoloader
 
-# Copy project files
-COPY . .
+RUN rm -rf ./git
 
-# Install composer dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
-
-# Expose port
-EXPOSE 8000
-
-# Jalankan Laravel
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Run FrankenPHP
+CMD ["php", "artisan", "octane:frankenphp", "--port=80"]
