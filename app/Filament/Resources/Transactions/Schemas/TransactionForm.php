@@ -32,16 +32,15 @@ class TransactionForm
                 Checkbox::make('is_paid_self')
                     ->label('Bayar sendiri')
                     ->reactive()
+                    ->afterStateHydrated(fn($set, $record) => $set('is_paid_self', filled($record?->paid_by)))
                     ->dehydrated(false)
-                    ->afterStateUpdated(function ($state, callable $set) {
-                        if ($state) {
-                            $set('paid_by', auth()->id());
-                        } else {
-                            $set('paid_by', null);
-                        }
+                    ->afterStateUpdated(function ($state, $set) {
+                        $set('paid_by', $state ? auth()->id() : null);
                     }),
+
                 Hidden::make('paid_by')
-                    ->dehydrated(true),
+                    ->dehydrated(true)
+                    ->nullable(),
             ]);
     }
 }

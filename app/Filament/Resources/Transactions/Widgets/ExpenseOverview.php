@@ -18,28 +18,25 @@ class ExpenseOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $transactions = $this->getPageTableQuery()
+        $query = $this->getPageTableQuery()
+            ->selectRaw('paid_by, SUM(amount) as total')
             ->whereNotNull('paid_by')
-            ->get(['paid_by', 'amount']);
+            ->groupBy('paid_by')
+            ->with('paidBy');
 
-        $totals = [];
+        $query->getQuery()->orders = [];
 
-        foreach ($transactions as $tx) {
-            $id = $tx->paid_by;
-
-            if (! isset($totals[$id])) {
-                $totals[$id] = 0;
-            }
-
-            $totals[$id] += $tx->amount;
-        }
+        $transactions = $query->get();
 
         $stats = [];
 
-        foreach ($totals as $paidById => $total) {
-            $paidByName = $transactions->firstWhere('paid_by', $paidById)->paidBy->name ?? 'Unknown';
+        foreach ($transactions as $tx) {
+            $paidByName = $tx->paidBy->name ?? 'Unknown';
 
-            $stats[] = Stat::make("{$paidByName}", 'Rp '.number_format($total, 0, ',', '.'))
+            $stats[] = Stat::make(
+                "{$paidByName}",
+                'Rp ' . number_format($tx->total, 0, ',', '.')
+            )
                 ->description('Total Reimbursed Bulan Ini')
                 ->color('danger');
         }

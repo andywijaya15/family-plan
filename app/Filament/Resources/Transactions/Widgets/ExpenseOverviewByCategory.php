@@ -18,29 +18,25 @@ class ExpenseOverviewByCategory extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $transactions = $this->getPageTableQuery()
-            ->whereNotNull('category_id') // pastikan field kategori
-            ->get(['category_id', 'amount']);
+        $query = $this->getPageTableQuery()
+            ->selectRaw('category_id, SUM(amount) as total')
+            ->whereNotNull('category_id')
+            ->groupBy('category_id')
+            ->with('category');
 
-        $totals = [];
+        $query->getQuery()->orders = [];
 
-        // Hitung total per kategori
-        foreach ($transactions as $tx) {
-            $id = $tx->category_id;
-
-            if (!isset($totals[$id])) {
-                $totals[$id] = 0;
-            }
-
-            $totals[$id] += $tx->amount;
-        }
+        $transactions = $query->orderByDesc('total')->get();
 
         $stats = [];
 
-        foreach ($totals as $categoryId => $total) {
-            $categoryName = $transactions->firstWhere('category_id', $categoryId)->category->name ?? 'Unknown';
+        foreach ($transactions as $tx) {
+            $categoryName = $tx->category->name ?? 'Unknown';
 
-            $stats[] = Stat::make("{$categoryName}", 'Rp ' . number_format($total, 0, ',', '.'))
+            $stats[] = Stat::make(
+                "{$categoryName}",
+                'Rp ' . number_format($tx->total, 0, ',', '.')
+            )
                 ->description('Total Pengeluaran Bulan Ini')
                 ->color('danger');
         }
