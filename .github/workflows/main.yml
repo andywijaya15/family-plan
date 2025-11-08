@@ -52,9 +52,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy with Docker Compose & Run Migrations
-        run: |
-          cd /home/devteam/stacks/family-plan
-          docker compose pull
-          docker compose up -d
-          docker compose exec -T family_plan_server php artisan migrate --force
+      # - name: Deploy with Docker Compose & Run Migrations
+      #   run: |
+      #     cd /home/devteam/stacks/family-plan
+      #     docker compose pull
+      #     docker compose up -d
+      #     docker compose exec -T family_plan_server php artisan migrate --force
