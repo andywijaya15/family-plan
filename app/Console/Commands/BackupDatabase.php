@@ -30,7 +30,7 @@ class BackupDatabase extends Command
             mkdir(storage_path('app/backups'), 0755, true);
         }
 
-        $command = "PGPASSWORD=\"{$pass}\" pg_dump -h {$host} -p {$port} -U {$user} -d {$dbname} -F p > {$backupFile}";
+        $command = "PGPASSWORD=\"{$pass}\" pg_dump -h {$host} -p {$port} -U {$user} -d {$dbname} -F p -n public > {$backupFile}";
 
         $this->info("Running backup...");
         $result = null;
