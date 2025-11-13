@@ -46,6 +46,7 @@ jobs:
             done
           fi
 
+
       # - name: Generate UUID for tag
       #   id: uuid
       #   run: echo "UUID_TAG=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
