@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      actions: read
 
     steps:
       - name: Checkout code
@@ -23,22 +24,44 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate UUID for tag
-        id: uuid
-        run: echo "UUID_TAG=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/family-plan:latest
-            ghcr.io/${{ github.repository_owner }}/family-plan:${{ env.UUID_TAG }}
-
-      - name: Output image URL
+      - name: Delete old package versions
         run: |
-          echo "✅ Image pushed:"
-          echo " - ghcr.io/${{ github.repository_owner }}/family-plan:latest"
-          echo " - ghcr.io/${{ github.repository_owner }}/family-plan:${{ env.UUID_TAG }}"
+          echo "🧹 Deleting old package versions..."
+          PACKAGE="family-plan"
+          OWNER="${{ github.repository_owner }}"
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+
+          versions=$(curl -s -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/users/$OWNER/packages/container/$PACKAGE/versions" | jq -r '.[].id')
+
+          if [ -z "$versions" ]; then
+            echo "No old versions found."
+          else
+            for id in $versions; do
+              echo "Deleting version ID: $id"
+              curl -X DELETE -H "Authorization: Bearer $TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/users/$OWNER/packages/container/$PACKAGE/versions/$id"
+            done
+          fi
+
+      # - name: Generate UUID for tag
+      #   id: uuid
+      #   run: echo "UUID_TAG=$(uuidgen | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: |
+      #       ghcr.io/${{ github.repository_owner }}/family-plan:latest
+      #       ghcr.io/${{ github.repository_owner }}/family-plan:${{ env.UUID_TAG }}
+
+      # - name: Output image URL
+      #   run: |
+      #     echo "✅ Image pushed:"
+      #     echo " - ghcr.io/${{ github.repository_owner }}/family-plan:latest"
+      #     echo " - ghcr.io/${{ github.repository_owner }}/family-plan:${{ env.UUID_TAG }}"
